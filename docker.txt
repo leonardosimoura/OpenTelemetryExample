@@ -1,1 +1,2 @@
-docker run -d -p 9411:9411 --restart always openzipkin/zipkin
+docker rm zipkin --force
+docker run -d -p 9411:9411 --name zipkin --restart always openzipkin/zipkin

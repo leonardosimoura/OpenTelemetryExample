@@ -1,0 +1,23 @@
+﻿@page
+@model FrontEnd.Pages.PessoaModel
+
+
+<h2>Pessoas</h2>
+<p>
+
+    <table class="table table-striped">
+        <tr>
+            <th>Id</th>
+            <th>Nome</th>
+            <th>Endereços </th>
+        </tr>
+        @foreach (var item in Model.Pessoas)
+        {
+            <tr>
+                <td>@item.PessoaId</td>
+                <td>@item.Nome</td>
+                <td> @string.Join("||", @item.Enderecos.Select(s => s.Nome)) </td>
+            </tr>
+        }
+    </table>
+</p>
