@@ -39,7 +39,7 @@ namespace BackEndPessoa.Controllers
             model.PessoaId = Guid.NewGuid();
              _dbContext.Pessoa.Add(model);
             _dbContext.SaveChanges();
-            return CreatedAtAction(nameof(Get), new { id = model.PessoaId }, null);
+            return CreatedAtAction(nameof(Get), new { id = model.PessoaId }, model.PessoaId);
         }
     }
 }

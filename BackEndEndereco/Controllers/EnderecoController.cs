@@ -30,7 +30,7 @@ namespace BackEndEndereco.Controllers
         [HttpGet("por-pessoa/{id:guid}")]
         public IActionResult GetPorPessoa([FromRoute] Guid id)
         {
-            return Ok(_collection.AsQueryable().FirstOrDefault(p => p.PessoaId == id));
+            return Ok(_collection.AsQueryable().Where(p => p.PessoaId == id).ToList());
         }
 
         [HttpPost]
@@ -38,7 +38,7 @@ namespace BackEndEndereco.Controllers
         {
             model.EnderecoId = Guid.NewGuid();
             _collection.InsertOne(model);
-            return CreatedAtAction(nameof(Get), new { id = model.EnderecoId }, null);
+            return CreatedAtAction(nameof(Get), new { id = model.EnderecoId }, model.EnderecoId);
         }
     }
 }

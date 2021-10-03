@@ -8,11 +8,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docker", "Docker", "{4C3D3E
 		docker.txt = docker.txt
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackEndPessoa", "BackEndPessoa\BackEndPessoa.csproj", "{4DA94110-5F6C-4ABD-AA5C-A7A593610345}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BackEndPessoa", "BackEndPessoa\BackEndPessoa.csproj", "{4DA94110-5F6C-4ABD-AA5C-A7A593610345}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackEndEndereco", "BackEndEndereco\BackEndEndereco.csproj", "{51AA2293-6D23-4E72-B04C-C54C8DE9950B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BackEndEndereco", "BackEndEndereco\BackEndEndereco.csproj", "{51AA2293-6D23-4E72-B04C-C54C8DE9950B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FrontEnd", "FrontEnd\FrontEnd.csproj", "{DF9356FD-C33E-4986-8BE6-9303B87D2837}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FrontEnd", "FrontEnd\FrontEnd.csproj", "{DF9356FD-C33E-4986-8BE6-9303B87D2837}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

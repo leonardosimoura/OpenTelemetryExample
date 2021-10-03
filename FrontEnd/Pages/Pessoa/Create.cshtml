@@ -1,0 +1,28 @@
+﻿@page
+@model FrontEnd.Pages.Pessoa.CreateModel
+@{
+}
+
+<script>
+    let enderecosCount = 0;
+    function onClickAddEndereco() {
+
+        $("#containerEnderecos").append("<input id='Enderecos_" + enderecosCount + "_Nome' name='Enderecos[" + enderecosCount +"].Nome' type='text'  /> </br>");
+        
+        enderecosCount++;
+    }
+</script>
+
+<form method="post">
+    Nome:
+    <input asp-for="Pessoa.Nome" />
+    <hr />
+    Endereços:
+    <button type="button" onclick="onClickAddEndereco()"> + Endereço </button>
+    <br />
+    <div id="containerEnderecos">
+
+    </div>
+    <hr />
+    <input type="submit" />
+</form>

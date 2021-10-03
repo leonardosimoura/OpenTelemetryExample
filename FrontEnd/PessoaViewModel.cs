@@ -10,16 +10,16 @@ namespace FrontEnd
     {
         public Guid PessoaId { get; set; }
         public string Nome { get; set; }
-        public IEnumerable<Endereco> Enderecos { get; set; } = Enumerable.Empty<Endereco>();
+        public IEnumerable<EnderecoViewModel> Enderecos { get; set; } = Enumerable.Empty<EnderecoViewModel>();
     }
 
-    public class Pessoa
+    public class PessoaViewModel
     {
         public Guid PessoaId { get; set; }
         public string Nome { get; set; }
     }
 
-    public class Endereco
+    public class EnderecoViewModel
     {
         public Guid EnderecoId { get; set; }
         public Guid PessoaId { get; set; }

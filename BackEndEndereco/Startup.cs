@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 using MongoDB.Driver.Core.Extensions.DiagnosticSources;
 using OpenTelemetry.Resources;
@@ -55,6 +56,13 @@ namespace BackEndEndereco
                 clientSettings.ClusterConfigurator = cb => cb.Subscribe(new DiagnosticsActivityEventSubscriber(options));
                 var mongoClient = new MongoClient(clientSettings);
                 return mongoClient;
+            });
+
+            BsonClassMap.RegisterClassMap<Endereco>(cm =>
+            {
+                cm.AutoMap();
+                cm.SetIgnoreExtraElements(true);
+                cm.MapIdMember(c => c.EnderecoId);
             });
 
             services.AddScoped<IMongoDatabase>((srv) => srv.GetService<IMongoClient>().GetDatabase("backend_endereco"));
