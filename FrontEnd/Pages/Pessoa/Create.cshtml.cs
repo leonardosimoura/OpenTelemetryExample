@@ -37,7 +37,7 @@ namespace FrontEnd.Pages.Pessoa
 
                     foreach (var item in Enderecos)
                     {
-                        using (var subActivity = TracingHelper.ActivitySource.StartActivity("CADASTRO_ENDERECO", ActivityKind.Client, activity.Context))
+                        using (var subActivity = TracingHelper.ActivitySource.StartActivity("CADASTRO_ENDERECO", ActivityKind.Client))
                         {
                             item.PessoaId = pessoaId;
                             var responseEndereco = await httpClient.PostAsync($@"http://localhost:5052/endereco", new StringContent(JsonConvert.SerializeObject(item), Encoding.UTF8, "application/json"));
