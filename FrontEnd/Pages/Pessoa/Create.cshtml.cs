@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using FrontEnd.Tracing;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
@@ -25,17 +27,23 @@ namespace FrontEnd.Pages.Pessoa
 
         public async Task<IActionResult> OnPostAsync()
         {
-            using (var httpClient = new HttpClient())
+            using (var activity = TracingHelper.ActivitySource.StartActivity("CADASTRO_PESSOA", ActivityKind.Client))
             {
-                var responsePessoa = await httpClient.PostAsync(@"http://localhost:5051/pessoa", new StringContent(JsonConvert.SerializeObject(Pessoa), Encoding.UTF8,  "application/json"));
-                responsePessoa.EnsureSuccessStatusCode();
-                var pessoaId= JsonConvert.DeserializeObject<Guid>(await responsePessoa.Content.ReadAsStringAsync());
-
-                foreach (var item in Enderecos)
+                using (var httpClient = new HttpClient())
                 {
-                    item.PessoaId = pessoaId;
-                    var responseEndereco = await httpClient.PostAsync($@"http://localhost:5052/endereco", new StringContent(JsonConvert.SerializeObject(item), Encoding.UTF8, "application/json"));
-                    responseEndereco.EnsureSuccessStatusCode();
+                    var responsePessoa = await httpClient.PostAsync(@"http://localhost:5051/pessoa", new StringContent(JsonConvert.SerializeObject(Pessoa), Encoding.UTF8, "application/json"));
+                    responsePessoa.EnsureSuccessStatusCode();
+                    var pessoaId = JsonConvert.DeserializeObject<Guid>(await responsePessoa.Content.ReadAsStringAsync());
+
+                    foreach (var item in Enderecos)
+                    {
+                        using (var subActivity = TracingHelper.ActivitySource.StartActivity("CADASTRO_ENDERECO", ActivityKind.Client, activity.Context))
+                        {
+                            item.PessoaId = pessoaId;
+                            var responseEndereco = await httpClient.PostAsync($@"http://localhost:5052/endereco", new StringContent(JsonConvert.SerializeObject(item), Encoding.UTF8, "application/json"));
+                            responseEndereco.EnsureSuccessStatusCode();
+                        }
+                    }
                 }
             }
 

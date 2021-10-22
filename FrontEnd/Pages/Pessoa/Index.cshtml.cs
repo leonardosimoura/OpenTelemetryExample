@@ -16,28 +16,33 @@ namespace FrontEnd.Pages.Pessoa
         {
             ViewData["Title"] = "Pessoas";
 
-            try
+            for (int i = 0; i < 100; i++)
             {
-                using (var httpClient = new HttpClient())
+                try
                 {
-                    var response = await httpClient.GetAsync(@"http://localhost:5051/pessoa");
-                    Pessoas = JsonConvert.DeserializeObject<IEnumerable<ListagemPessoaViewModel>>(await response.Content.ReadAsStringAsync());
-
-                    foreach (var item in Pessoas)
+                    using (var httpClient = new HttpClient())
                     {
-                        var responseEndereco = await httpClient.GetAsync($@"http://localhost:5052/endereco/por-pessoa/{item.PessoaId}");
-                        if (responseEndereco.StatusCode != System.Net.HttpStatusCode.NoContent)
-                        {
-                            item.Enderecos = JsonConvert.DeserializeObject<IEnumerable<EnderecoViewModel>>(await responseEndereco.Content.ReadAsStringAsync());
+                        var response = await httpClient.GetAsync(@"http://localhost:5051/pessoa");
+                        Pessoas = JsonConvert.DeserializeObject<IEnumerable<ListagemPessoaViewModel>>(await response.Content.ReadAsStringAsync());
 
+                        foreach (var item in Pessoas)
+                        {
+                            var responseEndereco = await httpClient.GetAsync($@"http://localhost:5052/endereco/por-pessoa/{item.PessoaId}");
+                            if (responseEndereco.StatusCode != System.Net.HttpStatusCode.NoContent)
+                            {
+                                item.Enderecos = JsonConvert.DeserializeObject<IEnumerable<EnderecoViewModel>>(await responseEndereco.Content.ReadAsStringAsync());
+
+                            }
                         }
                     }
                 }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
+
+            
             return Page();
         }
     }

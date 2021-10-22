@@ -47,6 +47,11 @@ namespace BackEndEndereco
                 {
                     o.Endpoint = new Uri(@"http://localhost:9411/api/v2/spans");
                 })
+                .AddJaegerExporter(config =>
+                {
+                    config.AgentHost = "localhost";
+                    config.AgentPort = 6831;
+                })
                 .AddConsoleExporter());
 
             services.AddScoped<IMongoClient>((srv) =>

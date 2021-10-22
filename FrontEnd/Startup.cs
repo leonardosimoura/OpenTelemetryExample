@@ -1,3 +1,4 @@
+using FrontEnd.Tracing;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -35,11 +36,17 @@ namespace FrontEnd
 
             services.AddOpenTelemetryTracing((builder) => builder
                .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService("FrontEnd"))
+               .AddSource(TracingHelper.KEY)
                .AddAspNetCoreInstrumentation()
                .AddHttpClientInstrumentation()
                .AddZipkinExporter(o =>
                {
                    o.Endpoint = new Uri(@"http://localhost:9411/api/v2/spans");
+               })
+               .AddJaegerExporter(config =>
+               {
+                    config.AgentHost = "localhost";
+                    config.AgentPort = 6831;
                })
                .AddConsoleExporter());
         }
