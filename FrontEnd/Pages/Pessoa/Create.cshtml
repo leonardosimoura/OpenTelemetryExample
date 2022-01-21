@@ -6,9 +6,9 @@
 <script>
     let enderecosCount = 0;
     function onClickAddEndereco() {
-
-        $("#containerEnderecos").append("<input id='Enderecos_" + enderecosCount + "_Nome' name='Enderecos[" + enderecosCount +"].Nome' type='text'  /> </br>");
-        
+        const id = "Enderecos_" + enderecosCount + "_Nome";
+        $("#containerEnderecos").append("<input id='"+ id +"' name='Enderecos[" + enderecosCount +"].Nome' type='text'  /> </br>");
+        $("#"+ id).focus()
         enderecosCount++;
     }
 </script>
