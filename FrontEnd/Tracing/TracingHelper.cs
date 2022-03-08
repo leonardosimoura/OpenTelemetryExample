@@ -11,6 +11,5 @@ namespace FrontEnd.Tracing
         public const string KEY = "MyActivitySource";
 
         public static ActivitySource ActivitySource { get; } = new ActivitySource(KEY);
-        
     }
 }
