@@ -36,6 +36,11 @@ namespace BackEndEndereco.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] Endereco model)
         {
+            //Testing
+            if (model.Nome.StartsWith("t1"))
+                throw new NotImplementedException();
+            
+
             model.EnderecoId = Guid.NewGuid();
             _collection.InsertOne(model);
             return CreatedAtAction(nameof(Get), new { id = model.EnderecoId }, model.EnderecoId);
