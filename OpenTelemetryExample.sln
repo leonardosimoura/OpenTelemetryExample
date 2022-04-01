@@ -1,13 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31624.102
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docker", "Docker", "{4C3D3E24-85E5-4392-8D70-D901AED1FD1B}"
-	ProjectSection(SolutionItems) = preProject
-		docker.txt = docker.txt
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BackEndPessoa", "BackEndPessoa\BackEndPessoa.csproj", "{4DA94110-5F6C-4ABD-AA5C-A7A593610345}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BackEndEndereco", "BackEndEndereco\BackEndEndereco.csproj", "{51AA2293-6D23-4E72-B04C-C54C8DE9950B}"
