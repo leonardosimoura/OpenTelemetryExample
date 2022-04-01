@@ -10,10 +10,12 @@ docker run -d --name mongodb  --restart=always -e MONGO_INITDB_ROOT_USERNAME=myu
 
 # Endpoints
 
-//Zipkin
+### Zipkin
+
 http://localhost:9411/zipkin/
 
-//Jaeger
+### Jaeger
+
 http://localhost:16686/
 
 # Clean Up
