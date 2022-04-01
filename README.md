@@ -21,6 +21,9 @@ http://localhost:16686/
 # Clean Up
 
 docker rm zipkin --force
+
 docker rm jaeger --force
+
 docker rm postgres --force
+
 docker rm mongodb --force
