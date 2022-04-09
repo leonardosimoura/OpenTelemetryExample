@@ -5,12 +5,19 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
 namespace FrontEnd.Pages.Pessoa
 {
     public class IndexModel : PageModel
     {
+        public IndexModel(ILogger<IndexModel> logger)
+        {
+            _logger = logger;
+        }
+
+        private ILogger<IndexModel> _logger { get; }
         public IEnumerable<ListagemPessoaViewModel> Pessoas { get; set; } = Enumerable.Empty<ListagemPessoaViewModel>();
         public async Task<IActionResult> OnGetAsync()
         {
@@ -20,6 +27,7 @@ namespace FrontEnd.Pages.Pessoa
             {
                 using (var httpClient = new HttpClient())
                 {
+                    _logger.LogInformation("buscando pessoas");
                     var response = await httpClient.GetAsync(@"http://localhost:5051/pessoa");
                     response.EnsureSuccessStatusCode();
                     if (response.StatusCode != System.Net.HttpStatusCode.NoContent)
@@ -27,6 +35,7 @@ namespace FrontEnd.Pages.Pessoa
 
                     foreach (var item in Pessoas)
                     {
+                        _logger.LogInformation($"buscando endereço - {item.Nome}");
                         var responseEndereco = await httpClient.GetAsync($@"http://localhost:5052/endereco/por-pessoa/{item.PessoaId}");
                         responseEndereco.EnsureSuccessStatusCode();
                         if (responseEndereco.StatusCode != System.Net.HttpStatusCode.NoContent)

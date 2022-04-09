@@ -15,6 +15,7 @@ using OpenTelemetry.Trace;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace BackEndEndereco
@@ -43,14 +44,20 @@ namespace BackEndEndereco
                 .AddAspNetCoreInstrumentation()
                 .AddHttpClientInstrumentation()
                 .AddMongoDBInstrumentation()
-                .AddZipkinExporter(o =>
+                //.AddZipkinExporter(o =>
+                //{
+                //    o.Endpoint = new Uri(@"http://localhost:9411/api/v2/spans");
+                //})
+                //.AddJaegerExporter(config =>
+                //{
+                //    config.AgentHost = "localhost";
+                //    config.AgentPort = 6831;
+                //})
+                .AddOtlpExporter(configure =>
                 {
-                    o.Endpoint = new Uri(@"http://localhost:9411/api/v2/spans");
-                })
-                .AddJaegerExporter(config =>
-                {
-                    config.AgentHost = "localhost";
-                    config.AgentPort = 6831;
+                    configure.Protocol = OpenTelemetry.Exporter.OtlpExportProtocol.Grpc;
+                    configure.Endpoint = new Uri("http://localhost:8200");
+                    //configure.Headers = "Authorization=Bearer {apm_secret_token}";
                 })
                 .AddConsoleExporter());
 

@@ -35,7 +35,9 @@ namespace FrontEnd
                 });
 
             services.AddOpenTelemetryTracing((builder) => builder
-               .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService("FrontEnd"))
+               .SetResourceBuilder(ResourceBuilder.CreateDefault()
+                                    .AddService("FrontEnd",serviceVersion: "1.0")
+                                    )
                .AddSource(TracingHelper.KEY)
                .AddAspNetCoreInstrumentation()
                .AddHttpClientInstrumentation()
@@ -48,7 +50,15 @@ namespace FrontEnd
                     config.AgentHost = "localhost";
                     config.AgentPort = 6831;
                })
+               .AddOtlpExporter(configure =>
+               {
+                    configure.Protocol = OpenTelemetry.Exporter.OtlpExportProtocol.Grpc;
+                    configure.Endpoint = new Uri("http://localhost:8200");
+                    //configure.Headers = "Authorization=Bearer {apm_secret_token}";
+
+               })
                .AddConsoleExporter());
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

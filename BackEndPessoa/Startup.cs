@@ -59,6 +59,12 @@ namespace BackEndPessoa
                     config.AgentHost = "localhost";
                     config.AgentPort = 6831;
                 })
+                 .AddOtlpExporter(configure =>
+                 {
+                     configure.Protocol = OpenTelemetry.Exporter.OtlpExportProtocol.Grpc;
+                     configure.Endpoint = new Uri("http://localhost:8200");
+                     //configure.Headers = "Authorization=Bearer {apm_secret_token}";
+                 })
                 .AddConsoleExporter());
         }
 
