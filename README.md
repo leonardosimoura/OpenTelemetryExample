@@ -8,15 +8,45 @@ docker run --name postgres --restart=always -e POSTGRES_DB="myuser" -e POSTGRES_
 
 docker run -d --name mongodb  --restart=always -e MONGO_INITDB_ROOT_USERNAME=myuser -e MONGO_INITDB_ROOT_PASSWORD=123456789 -p 27017:27017 mongo
 
+## Elastic APM (K8s)
+
+### Install ECK 
+
+kubectl create -f https://download.elastic.co/downloads/eck/2.1.0/crds.yaml
+
+kubectl apply -f https://download.elastic.co/downloads/eck/2.1.0/operator.yaml
+
+kubectl apply -f ./eck/eck.yaml
+
+### Configs
+
+#### Kibana 
+
+http://localhost:5601/
+
+user elastic
+senha:
+    abrir o dashboad e procurar o secret "quickstart-es-elastic-user"
+
+#### APM Integration
+
+add apm integration
+
+quickstart-apm-http:8200
+
 # Endpoints
 
-### Zipkin
+## Zipkin
 
 http://localhost:9411/zipkin/
 
-### Jaeger
+## Jaeger
 
 http://localhost:16686/
+
+## Kibana 
+
+http://localhost:5601/
 
 # Clean Up
 
@@ -27,3 +57,5 @@ docker rm jaeger --force
 docker rm postgres --force
 
 docker rm mongodb --force
+
+kubectl destroy -f ./eck/eck.yaml
