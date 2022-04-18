@@ -57,7 +57,6 @@ builder.Services.AddOpenTelemetryTracing((builder) => builder
    .AddSource(TracingHelper.KEY)
    .AddAspNetCoreInstrumentation()
    .AddHttpClientInstrumentation()
-   .
    .AddZipkinExporter(o =>
    {
        o.Endpoint = new Uri(@"http://localhost:9411/api/v2/spans");
