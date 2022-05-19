@@ -26,7 +26,9 @@ http://localhost:5601/
 
 user elastic
 senha:
-    abrir o dashboad e procurar o secret "quickstart-es-elastic-user"
+    abrir o dashboad
+    
+    procurar o secret "quickstart-es-elastic-user"
 
 #### APM Integration
 
