@@ -58,4 +58,4 @@ docker rm postgres --force
 
 docker rm mongodb --force
 
-kubectl destroy -f ./eck/eck.yaml
+kubectl delete -f ./eck/eck.yaml
