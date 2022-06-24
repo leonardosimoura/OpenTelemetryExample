@@ -1,6 +1,6 @@
 # Running
 
-Change OtlpExporterEndpoint Constant to localhost or local ip
+Change OtlpExporterEndpoint Constant to localhost or local ip ( elastic http://localhost:8200 / datadog http://localhost:4317)
 
 docker run -d -p 9411:9411 --name zipkin --restart always openzipkin/zipkin
 
