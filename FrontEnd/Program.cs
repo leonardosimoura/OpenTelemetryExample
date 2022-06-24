@@ -11,12 +11,14 @@ using OpenTelemetry.Trace;
 using System;
 using System.Net;
 using System.Text.Json;
+using Serilog;
+using FrontEnd.SerilogConfiguration;
 
 AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
 
 var builder = WebApplication.CreateBuilder(args);
 
-const string OtlpExporterEndpoint = "http://localhost:8200";
+const string OtlpExporterEndpoint = "http://localhost:4317";
 
 builder.WebHost.ConfigureKestrel(options =>
 {
@@ -26,10 +28,18 @@ builder.WebHost.ConfigureKestrel(options =>
     });
 });
 
+var logger = new LoggerConfiguration()
+    .Enrich.FromLogContext()
+    .Enrich.With<DataDogEnricher>()
+        .WriteTo.Console(formatter: new Serilog.Formatting.Json.JsonFormatter())
+        .CreateLogger();
 
-builder.Logging.ClearProviders();
+builder.Host.UseSerilog(logger);
+
 builder.Logging.AddOpenTelemetry(options =>
 {
+    options.SetResourceBuilder(ResourceBuilder.CreateDefault()
+                        .AddService("FrontEnd", serviceVersion: "1.0"));
     options.IncludeFormattedMessage = true;
     options.IncludeScopes = true;
     options.ParseStateValues = true;
@@ -37,6 +47,10 @@ builder.Logging.AddOpenTelemetry(options =>
     {
         configure.Protocol = OpenTelemetry.Exporter.OtlpExportProtocol.Grpc;
         configure.Endpoint = new Uri(OtlpExporterEndpoint);
+        configure.BatchExportProcessorOptions = new OpenTelemetry.BatchExportProcessorOptions<System.Diagnostics.Activity>
+        {
+            MaxQueueSize = 2
+        };
         //configure.Headers = "Authorization=Bearer {apm_secret_token}";
     });
 });
@@ -57,7 +71,6 @@ builder.Services.AddOpenTelemetryTracing((builder) => builder
    .AddSource(TracingHelper.KEY)
    .AddAspNetCoreInstrumentation()
    .AddHttpClientInstrumentation()
-   .
    .AddZipkinExporter(o =>
    {
        o.Endpoint = new Uri(@"http://localhost:9411/api/v2/spans");

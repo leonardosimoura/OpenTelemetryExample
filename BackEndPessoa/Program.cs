@@ -18,7 +18,7 @@ AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport
 
 var builder = WebApplication.CreateBuilder(args);
 
-const string OtlpExporterEndpoint = "http://localhost:8200";
+const string OtlpExporterEndpoint = "http://localhost:4317";
 
 builder.WebHost.ConfigureKestrel(options =>
 {
