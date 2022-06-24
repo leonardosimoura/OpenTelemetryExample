@@ -11,30 +11,20 @@ using OpenTelemetry.Trace;
 using System;
 using System.Net;
 using System.Text.Json;
+using FrontEnd.Options;
+using Shared;
 using Serilog;
-using FrontEnd.SerilogConfiguration;
 
 AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
 
 var builder = WebApplication.CreateBuilder(args);
 
-const string OtlpExporterEndpoint = "http://localhost:4317";
+const string OtlpExporterEndpoint = "http://192.168.1.100:4317";
 
-builder.WebHost.ConfigureKestrel(options =>
-{
-    options.Listen(IPAddress.Any, 5053, listenOptions =>
-    {
-        listenOptions.Protocols = HttpProtocols.Http1;
-    });
-});
+builder.Services.Configure<BackEndOptions>(
+builder.Configuration.GetSection(BackEndOptions.KEY));
 
-var logger = new LoggerConfiguration()
-    .Enrich.FromLogContext()
-    .Enrich.With<DataDogEnricher>()
-        .WriteTo.Console(formatter: new Serilog.Formatting.Json.JsonFormatter())
-        .CreateLogger();
-
-builder.Host.UseSerilog(logger);
+builder.Host.UseSerilog(SerilogConfig.CreateSerilogLogger());
 
 builder.Logging.AddOpenTelemetry(options =>
 {

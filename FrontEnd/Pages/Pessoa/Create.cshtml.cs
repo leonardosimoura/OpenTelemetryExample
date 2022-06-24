@@ -5,15 +5,24 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using FrontEnd.Options;
 using FrontEnd.Tracing;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
 namespace FrontEnd.Pages.Pessoa
 {
     public class CreateModel : PageModel
     {
+        private readonly BackEndOptions _backEnds;
+
+        public CreateModel(IOptions<BackEndOptions> backEndsOptions)
+        {
+            _backEnds = backEndsOptions.Value;
+        }
+
         public void OnGet()
         {
             ViewData["Title"] = "Nova Pessoa";
@@ -31,7 +40,7 @@ namespace FrontEnd.Pages.Pessoa
             {
                 using (var httpClient = new HttpClient())
                 {
-                    var responsePessoa = await httpClient.PostAsync(@"http://localhost:5051/pessoa", new StringContent(JsonConvert.SerializeObject(Pessoa), Encoding.UTF8, "application/json"));
+                    var responsePessoa = await httpClient.PostAsync(@$"{_backEnds.PessoaUrl}/pessoa", new StringContent(JsonConvert.SerializeObject(Pessoa), Encoding.UTF8, "application/json"));
                     responsePessoa.EnsureSuccessStatusCode();
                     var pessoaId = JsonConvert.DeserializeObject<Guid>(await responsePessoa.Content.ReadAsStringAsync());
 
@@ -42,7 +51,7 @@ namespace FrontEnd.Pages.Pessoa
                             using (var subActivity = TracingHelper.ActivitySource.StartActivity("CADASTRO_ENDERECO", ActivityKind.Client))
                             {
                                 item.PessoaId = pessoaId;
-                                var responseEndereco = await httpClient.PostAsync($@"http://localhost:5052/endereco", new StringContent(JsonConvert.SerializeObject(item), Encoding.UTF8, "application/json"));
+                                var responseEndereco = await httpClient.PostAsync(@$"{_backEnds.EnderecoUrl}/endereco", new StringContent(JsonConvert.SerializeObject(item), Encoding.UTF8, "application/json"));
                                 responseEndereco.EnsureSuccessStatusCode();
                             }
                         }

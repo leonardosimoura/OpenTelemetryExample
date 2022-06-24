@@ -4,7 +4,7 @@ using Serilog.Events;
 using System;
 using System.Diagnostics;
 
-namespace FrontEnd.SerilogConfiguration
+namespace Shared.SerilogEnrichers
 {
     public class DataDogEnricher : ILogEventEnricher
     {

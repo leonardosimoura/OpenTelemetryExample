@@ -11,6 +11,8 @@ using Microsoft.OpenApi.Models;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
+using Serilog;
+using Shared;
 using System;
 using System.Net;
 
@@ -18,18 +20,10 @@ AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport
 
 var builder = WebApplication.CreateBuilder(args);
 
-const string OtlpExporterEndpoint = "http://localhost:4317";
+const string OtlpExporterEndpoint = "http://192.168.1.100:4317";
 
-builder.WebHost.ConfigureKestrel(options =>
-{
-    options.Listen(IPAddress.Any, 5051, listenOptions =>
-    {
-        listenOptions.Protocols = HttpProtocols.Http1;
-    });
-});
+builder.Host.UseSerilog(SerilogConfig.CreateSerilogLogger());
 
-
-builder.Logging.ClearProviders();
 builder.Logging.AddOpenTelemetry(options =>
 {
     options.IncludeFormattedMessage = true;
@@ -74,19 +68,16 @@ builder.Services.AddOpenTelemetryTracing((builder) => builder
      .AddOtlpExporter(configure =>
      {
          configure.Protocol = OpenTelemetry.Exporter.OtlpExportProtocol.Grpc;
-         configure.Endpoint = new Uri("http://localhost:8200");
+         configure.Endpoint = new Uri(OtlpExporterEndpoint);
          //configure.Headers = "Authorization=Bearer {apm_secret_token}";
      }));
 
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseDeveloperExceptionPage();
-    app.UseSwagger();
-    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "BackEndPessoa v1"));
-}
+app.UseDeveloperExceptionPage();
+app.UseSwagger();
+app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "BackEndPessoa v1"));
 
 app.UseHttpsRedirection();
 

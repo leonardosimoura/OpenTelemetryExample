@@ -11,6 +11,8 @@ using MongoDB.Driver.Core.Extensions.DiagnosticSources;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
+using Serilog;
+using Shared;
 using System;
 
 
@@ -18,9 +20,10 @@ AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport
 
 var builder = WebApplication.CreateBuilder(args);
 
-const string OtlpExporterEndpoint = "http://localhost:4317";
+const string OtlpExporterEndpoint = "http://192.168.1.100:4317";
 
-builder.Logging.ClearProviders();
+builder.Host.UseSerilog(SerilogConfig.CreateSerilogLogger());
+
 builder.Logging.AddOpenTelemetry(options =>
 {
     options.IncludeFormattedMessage = true;
@@ -82,12 +85,9 @@ builder.Services.AddScoped<IMongoDatabase>((srv) => srv.GetService<IMongoClient>
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseDeveloperExceptionPage();
-    app.UseSwagger();
-    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "BackEndEndereco v1"));
-}
+app.UseDeveloperExceptionPage();
+app.UseSwagger();
+app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "BackEndEndereco v1"));
 
 app.UseHttpsRedirection();
 
