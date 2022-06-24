@@ -35,7 +35,7 @@ namespace FrontEnd.Pages.Pessoa
 
                     foreach (var item in Pessoas)
                     {
-                        _logger.LogInformation($"buscando endereço - {item.Nome}");
+                        _logger.LogInformation($"buscando endereço -  {item.PessoaId} - {item.Nome}");
                         var responseEndereco = await httpClient.GetAsync($@"http://localhost:5052/endereco/por-pessoa/{item.PessoaId}");
                         responseEndereco.EnsureSuccessStatusCode();
                         if (responseEndereco.StatusCode != System.Net.HttpStatusCode.NoContent)
